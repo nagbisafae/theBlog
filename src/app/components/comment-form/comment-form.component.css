@@ -8,4 +8,25 @@ input {
     font-weight: bold;
     cursor: pointer;
   }
+   /* Animation for slide-in effect */
+@keyframes slide-in {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-in {
+  animation: slide-in 0.3s ease-out;
+}
+
+/* Light shadow and rounded corners */
+.shadow-md {
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
     
