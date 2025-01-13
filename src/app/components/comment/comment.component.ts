@@ -96,5 +96,8 @@ export class CommentComponent {
   }
   ngOnInit() {
     console.log('Commentaire reçu :', this.comment);
+    if (!this.comment.replies) {
+      this.comment.replies = []; // Initialisation par défaut
+    }
   }
 }
