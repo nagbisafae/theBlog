@@ -17,6 +17,8 @@ export class HomeComponent implements OnInit {
   filteredArticles: any[] = [];
   searchTerm: string = '';
   selectedCategory: string = 'All';
+  currentPage = 1; // Page actuelle
+  itemsPerPage = 4; // Nombre d'articles par page
 
   // Injecter le `Router` et le `ArticleService`
   constructor(
@@ -27,9 +29,31 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     // Récupérer les articles depuis le backend
     this.articleService.getArticles().subscribe((data) => {
-      this.articles = data;
-      this.filteredArticles = data;
+      // Sort articles by created_at date in descending order (newest first)
+    this.articles = data.sort(
+      (a: any, b: any) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    );
+    // Initialiser la pagination (afficher les articles de la première page)
+    this.updatePagination();
     });
+  }
+
+  // Méthode pour mettre à jour les articles affichés en fonction de la pagination
+  updatePagination(): void {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    this.filteredArticles = this.articles.slice(startIndex, endIndex);
+  }
+
+  // Changer de page
+  changePage(page: number): void {
+    this.currentPage = page;
+    this.updatePagination();
+  }
+
+  // Méthode pour calculer le nombre total de pages
+  get totalPages(): number {
+    return Math.ceil(this.articles.length / this.itemsPerPage);
   }
 
   // Filtrer les articles
@@ -40,7 +64,10 @@ export class HomeComponent implements OnInit {
           article.category === this.selectedCategory) &&
         article.title.toLowerCase().includes(this.searchTerm.toLowerCase())
       );
-    });
+    })
+    .sort(
+      (a: any, b: any) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    ); // Ensure the filtered list is also sorted by date
   }
 
   // Filtrer par catégorie
@@ -53,4 +80,9 @@ export class HomeComponent implements OnInit {
   viewArticle(article: any): void {
     this.router.navigate(['/article', article.id]);
   }
+
+  get noArticlesFound(): boolean {
+    return this.filteredArticles.length === 0;
+  }
+  
 }

@@ -1,14 +1,14 @@
 <app-header></app-header>
-<div class="m-4">
+<div class="m-8">
   <div class="container mx-auto">
     <div class="flex flex-col items-center">
       <!-- Barre de recherche -->
-      <div class="w-full max-w-md mb-6">
+      <div class="w-full max-w-[83%] mb-6">
         <input
           [(ngModel)]="searchTerm"
           (input)="filterArticles()"
           type="text"
-          placeholder="Search"
+          placeholder="Find the article that speaks to you.."
           class="search-bar"
         />
       </div>
@@ -21,13 +21,6 @@
           (click)="filterByCategory('All')"
         >
           All
-        </button>
-        <button
-          class="btn-category"
-          [class.active]="selectedCategory === 'Popular'"
-          (click)="filterByCategory('Popular')"
-        >
-          Popular
         </button>
         <button
           class="btn-category"
@@ -49,6 +42,35 @@
           (click)="filterByCategory('Trauma & Healing')"
         >
           Trauma & Healing
+        </button>
+        <!-- Nouvelles catégories -->
+        <button
+          class="btn-category"
+          [class.active]="selectedCategory === 'Mindfulness & Meditation'"
+          (click)="filterByCategory('Mindfulness & Meditation')"
+        >
+          Mindfulness & Meditation
+        </button>
+        <button
+          class="btn-category"
+          [class.active]="selectedCategory === 'Self-Care'"
+          (click)="filterByCategory('Self-Care')"
+        >
+          Self-Care
+        </button>
+        <button
+          class="btn-category"
+          [class.active]="selectedCategory === 'Relationships & Mental Health'"
+          (click)="filterByCategory('Relationships & Mental Health')"
+        >
+          Relationships & Mental Health
+        </button>
+        <button
+          class="btn-category"
+          [class.active]="selectedCategory === 'Work-Life Balance'"
+          (click)="filterByCategory('Work-Life Balance')"
+        >
+          Work-Life Balance
         </button>
       </div>
 
@@ -85,6 +107,28 @@
           </div>
         </div>
       </div>
+      <!-- Message "No articles found" -->
+  <div *ngIf="noArticlesFound" class="flex flex-col items-center justify-center text-center">
+    <p class="text-xl font-semibold text-gray-700">
+      No articles found. 
+    </p>
+    <p class="text-gray-500">
+      Try another search term or explore different categories.
+    </p>
+  </div>
+
+      <!-- Pagination -->
+    <div class="pagination flex justify-center mt-6">
+      <button
+        *ngFor="let page of [].constructor(totalPages); let i = index"
+        class="btn-category"
+        [class.active]="currentPage === i + 1"
+        (click)="changePage(i + 1)"
+      >
+        {{ i + 1 }}
+      </button>
+    </div>
+
     </div>
   </div>
 </div>
